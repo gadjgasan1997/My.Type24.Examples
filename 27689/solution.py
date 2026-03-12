@@ -1,22 +1,32 @@
-﻿f = open("data.txt").readline()
-k = 0
-m = 0
-expected = 'A'
-for c in f:
-	if c == expected:
-		k += 1
-		m = max(m, k)
+﻿# Читаем строку из файла
+s = open("data.txt").readline()
 
-		if c == 'X':
-			expected = 'Y'
-		elif c == 'Y':
-			expected = 'Z'
-		else:
-			expected = 'X'
-	elif c == 'X':
-		expected = 'Y'
-		k = 1
-	else:
-		expected = 'X'
-		k = 0
-print(m)
+current_length = 0  # Текущая длина правильной цепочки
+max_length = 0  # Рекордная длина
+next_expected_char = 'X'  # Символ, который мы ждем следующим
+
+for char in s:
+    # Если пришел именно тот символ, который мы ждали
+    if char == next_expected_char:
+        current_length += 1
+        max_length = max(max_length, current_length)
+
+        # Определяем, какой символ будет следующим в очереди
+        if char == 'X':
+            next_expected_char = 'Y'
+        elif char == 'Y':
+            next_expected_char = 'Z'
+        else:  # если char == 'Z'
+            next_expected_char = 'X'
+
+    # Если пришел не тот символ, но это 'X' — начинаем новую цепочку с него
+    elif char == 'X':
+        current_length = 1
+        next_expected_char = 'Y'
+
+    # Если пришел не тот символ и это не 'X' — всё сбрасывается
+    else:
+        current_length = 0
+        next_expected_char = 'X'
+
+print(max_length)
